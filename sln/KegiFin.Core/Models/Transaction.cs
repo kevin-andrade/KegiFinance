@@ -7,7 +7,7 @@ public class Transaction
     public long Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime PaidOrReceivedAt { get; set; }
+    public DateTime? PaidOrReceivedAt { get; set; }
     public ETransactionType Type { get; set; } = ETransactionType.Withdraw;
     public decimal Amount { get; set; }
     public string CategoryId { get; set; } = string.Empty;
