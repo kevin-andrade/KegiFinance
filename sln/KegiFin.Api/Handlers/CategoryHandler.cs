@@ -3,10 +3,11 @@ using KegiFin.Core.Handlers;
 using KegiFin.Core.Models;
 using KegiFin.Core.Requests.Categories;
 using KegiFin.Core.Responses;
+using ILogger = Serilog.ILogger;
 
 namespace KegiFin.Api.Handlers;
 
-public class CategoryHandler(AppDbContext context) : ICategoryHandler
+public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logger) : ICategoryHandler
 {
     public async Task<Response<Category>> CreateCategoryAsync(CreateCategoryRequest request)
     {
@@ -21,12 +22,19 @@ public class CategoryHandler(AppDbContext context) : ICategoryHandler
             
             await context.Categories.AddAsync(category);
             await context.SaveChangesAsync();
+            
+            logger.LogInformation($"Category created successfully Id: {category.Id}");
+            
             return new Response<Category>(category, "Category created successfully");
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
-            throw;
+            logger.LogError(
+                e,
+                "Error creating category Id: {userId} | Name: {name}",
+                request.UserId, request.Name);
+            
+            return new Response<Category>(null, "Error creating category");
         }
     }
 

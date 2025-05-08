@@ -1,29 +1,46 @@
 using KegiFin.Api.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+    // .WriteTo.Seq("http://localhost:5341") // Ative se for usar o Seq
+    .Enrich.FromLogContext()
+    .CreateLogger();
 
-var cnnString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
-
-builder.Services.AddDbContext<AppDbContext>(x =>
+try
 {
-    x.UseSqlServer(cnnString);
-});
+    Log.Information("Starting...");
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(x =>
-{
-    x.CustomSchemaIds(y => y.FullName);
-});
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Host.UseSerilog();
 
-var app = builder.Build();
+    var cnnString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    builder.Services.AddDbContext<AppDbContext>(x => { x.UseSqlServer(cnnString); });
+
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen(x => { x.CustomSchemaIds(y => y.FullName); });
+
+    var app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.MapGet("/", () => "Hello World!");
+
+    app.Run();
 }
-
-app.MapGet("/", () => "Hello World!");
-
-app.Run();
+catch (Exception e)
+{
+    Log.Fatal(e, "Critical error starting the system");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
