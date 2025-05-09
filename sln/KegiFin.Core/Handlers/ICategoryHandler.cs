@@ -6,9 +6,9 @@ namespace KegiFin.Core.Handlers;
 
 public interface ICategoryHandler
 {
-    Task<Response<Category>> CreateCategoryAsync(CreateCategoryRequest request);
-    Task<Response<Category>> UpdateCategoryAsync(UpdateCategoryRequest request);
-    Task<Response<Category>> DeleteCategoryAsync(DeleteCategoryRequest request);
-    Task<Response<Category>> GetCategoryByIdAsync(GetCategoryByIdRequest request);
-    Task<Response<List<Category>>> GetAllCategoriesAsync(GetAllCategoriesRequest request);
+    Task<Response<Category?>> CreateCategoryAsync(CreateCategoryRequest request);
+    Task<Response<Category?>> UpdateCategoryAsync(UpdateCategoryRequest request);
+    Task<Response<Category?>> DeleteCategoryAsync(DeleteCategoryRequest request);
+    Task<Response<Category?>> GetCategoryByIdAsync(GetCategoryByIdRequest request);
+    Task<PagedResponse<List<Category>>> GetAllCategoriesAsync(GetAllCategoriesRequest request);
 }

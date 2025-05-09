@@ -3,13 +3,13 @@ using KegiFin.Core.Handlers;
 using KegiFin.Core.Models;
 using KegiFin.Core.Requests.Categories;
 using KegiFin.Core.Responses;
-using ILogger = Serilog.ILogger;
+using Microsoft.EntityFrameworkCore;
 
 namespace KegiFin.Api.Handlers;
 
 public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logger) : ICategoryHandler
 {
-    public async Task<Response<Category>> CreateCategoryAsync(CreateCategoryRequest request)
+    public async Task<Response<Category?>> CreateCategoryAsync(CreateCategoryRequest request)
     {
         try
         {
@@ -25,7 +25,7 @@ public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logg
             
             logger.LogInformation($"Category created successfully Id: {category.Id}");
             
-            return new Response<Category>(category, "Category created successfully");
+            return new Response<Category?>(category, "Category created successfully", 201);
         }
         catch (Exception e)
         {
@@ -34,27 +34,133 @@ public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logg
                 "Error creating category Id: {userId} | Name: {name}",
                 request.UserId, request.Name);
             
-            return new Response<Category>(null, "Error creating category");
+            return new Response<Category?>(null, "Error creating category", 500);
         }
     }
 
-    public Task<Response<Category>> UpdateCategoryAsync(UpdateCategoryRequest request)
+    public async Task<Response<Category?>> UpdateCategoryAsync(UpdateCategoryRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var category = await context
+                .Categories
+                .FirstOrDefaultAsync(
+                    x => x.Id == request.Id && x.UserId == request.UserId);
+
+            if (category is null)
+            {
+                return new Response<Category?>(null, "Category not found", 404);
+            }
+            
+            category.Name = request.Name;
+            category.Description = request.Description;
+
+            context.Categories.Update(category);
+            await context.SaveChangesAsync();
+            
+            logger.LogInformation($"Category successfully update Id: {category.Id}");
+            
+            return new Response<Category?>(category, "Category successfully update");
+        }
+        catch (Exception e)
+        {
+            logger.LogError(
+                e,
+                "Error update category userId: {userId} | Name: {name}",
+                request.UserId, request.Name);
+            
+            return new Response<Category?>(null, "Error update category", 500);
+        }
     }
 
-    public Task<Response<Category>> DeleteCategoryAsync(DeleteCategoryRequest request)
+    public async Task<Response<Category?>> DeleteCategoryAsync(DeleteCategoryRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var category = await context
+                .Categories
+                .FirstOrDefaultAsync(
+                    x => x.Id == request.Id && x.UserId == request.UserId);
+
+            if (category is null)
+            {
+                return new Response<Category?>(null, "Category not found", 404);
+            }
+            
+            context.Categories.Remove(category);
+            await context.SaveChangesAsync();
+            
+            logger.LogInformation($"Category successfully deleted Id: {category.Id}");
+            
+            return new Response<Category?>(category, "Category successfully deleted");
+        }
+        catch (Exception e)
+        {
+            logger.LogError(
+                e,
+                "Error delete category userId: {userId} | Id: {name}",
+                request.UserId, request.Id);
+            
+            return new Response<Category?>(null, "Error update category", 500);
+        }
     }
 
-    public Task<Response<Category>> GetCategoryByIdAsync(GetCategoryByIdRequest request)
+    public async Task<Response<Category?>> GetCategoryByIdAsync(GetCategoryByIdRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var category = await context
+                .Categories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(
+                    x => x.Id == request.Id && x.UserId == request.UserId);
+
+            return category is null
+                ? new Response<Category?>(null, "Category not found", 404)
+                : new Response<Category?>(category);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(
+                e,
+                "Error load category by Id: {userId} | Id: {name}",
+                request.UserId, request.Id);
+            
+            return new Response<Category?>(null, "Error load category", 500);
+        }
     }
 
-    public Task<Response<List<Category>>> GetAllCategoriesAsync(GetAllCategoriesRequest request)
+    public async Task<PagedResponse<List<Category>>> GetAllCategoriesAsync(GetAllCategoriesRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var query = context
+                .Categories
+                .AsNoTracking()
+                .Where(x => x.UserId == request.UserId)
+                .OrderBy(x => x.Name);
+
+            var categories = await query
+                .Skip((request.PageNumber - 1)  * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync();;
+            
+            var totalCount = await query.CountAsync();
+            
+            return new PagedResponse<List<Category>>(
+                categories,
+                totalCount,
+                request.PageNumber,
+                request.PageSize);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(
+                e,
+                "Error loading all user categories: {userId}",
+                request.UserId);
+            
+            return new PagedResponse<List<Category>>(null, "Error load all categories", 500);
+        }
     }
 }
