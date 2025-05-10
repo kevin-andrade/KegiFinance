@@ -2,9 +2,6 @@ using KegiFin.Api.Data;
 using KegiFin.Api.Endpoints;
 using KegiFin.Api.Handlers;
 using KegiFin.Core.Handlers;
-using KegiFin.Core.Models;
-using KegiFin.Core.Requests.Categories;
-using KegiFin.Core.Responses;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
