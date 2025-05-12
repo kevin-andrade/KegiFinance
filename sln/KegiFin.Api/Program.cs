@@ -26,6 +26,7 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(x => { x.CustomSchemaIds(y => y.FullName); });
     builder.Services.AddTransient<ICategoryHandler, CategoryHandler>();
+    builder.Services.AddTransient<ITransactionHandler, TransactionHandler>();
 
     var app = builder.Build();
 

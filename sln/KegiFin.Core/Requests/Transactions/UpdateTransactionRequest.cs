@@ -3,7 +3,7 @@ using KegiFin.Core.Enums;
 
 namespace KegiFin.Core.Requests.Transactions;
 
-public class UpdateTransactionRequest
+public class UpdateTransactionRequest : BaseRequest
 {
     public long Id { get; set; }
     
@@ -24,5 +24,5 @@ public class UpdateTransactionRequest
     public long CategoryId { get; set; }
     
     [Required(ErrorMessage = "Date invalid")]
-    public DateTime? PaideOrReceivedAt { get; set; }
+    public DateTime? PaidOrReceivedAt { get; set; }
 }
