@@ -35,5 +35,10 @@ public class TransactionMapping : IEntityTypeConfiguration<Transaction>
             .IsRequired(true)
             .HasColumnType("VARCHAR")
             .HasMaxLength(160);
+        
+        builder.HasOne(x => x.Category)
+            .WithMany()
+            .HasForeignKey(x => x.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
