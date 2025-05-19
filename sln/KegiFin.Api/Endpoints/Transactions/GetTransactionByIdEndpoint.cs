@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using KegiFin.Api.Common.Api;
 using KegiFin.Core.Handlers;
 using KegiFin.Core.Models;
@@ -17,10 +18,11 @@ public class GetTransactionByIdEndpoint : IEndpoint
             .Produces<Response<Transaction?>>();
 
     private static async Task<IResult> HandlerAsync(
+        ClaimsPrincipal user,
         ITransactionHandler handler,
         long id)
     {
-        var request = new GetTransactionByIdRequest{ Id = id, UserId = "test1" };
+        var request = new GetTransactionByIdRequest{ Id = id, UserId = user.Identity?.Name ?? string.Empty };
         var result = await handler.GetTransactionByIdAsync(request);
         return result.IsSuccess
             ? Results.Ok(result)

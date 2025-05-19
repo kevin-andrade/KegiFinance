@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using KegiFin.Api.Common.Api;
 using KegiFin.Core;
 using KegiFin.Core.Handlers;
@@ -19,11 +20,17 @@ public class GetAllCategoriesEndpoint : IEndpoint
             .Produces<PagedResponse<List<Category>?>>();
         
     private static async Task<IResult> HandlerAsync(
+        ClaimsPrincipal user,
         ICategoryHandler handler,
         [FromQuery] int pageNumber = Configuration.DefaultPageNumber,
         [FromQuery] int pageSize = Configuration.DefaultPageSize)
     {
-        var request = new GetAllCategoriesRequest{UserId = "test1", PageNumber = pageNumber, PageSize = pageSize};
+        var request = new GetAllCategoriesRequest
+        {
+            UserId = user.Identity?.Name ?? string.Empty,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
         var result = await handler.GetAllCategoriesAsync(request);
         return result.IsSuccess
             ? Results.Ok(result)

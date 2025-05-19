@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using KegiFin.Api.Common.Api;
 using KegiFin.Core.Handlers;
 using KegiFin.Core.Models;
@@ -17,9 +18,11 @@ public class CreateCategoryEndpoint : IEndpoint
             .Produces<Response<Category>>();
         
         private static async Task<IResult> HandlerAsync(
+            ClaimsPrincipal user,
             ICategoryHandler handler,
             CreateCategoryRequest request)
         {
+            request.UserId = user.Identity?.Name ?? string.Empty;
             var result = await handler.CreateCategoryAsync(request);
             return result.IsSuccess
                 ? Results.Created($"/{result.Data?.Id}", result)

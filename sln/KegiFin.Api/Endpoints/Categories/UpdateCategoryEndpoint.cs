@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using KegiFin.Api.Common.Api;
 using KegiFin.Core.Handlers;
 using KegiFin.Core.Models;
@@ -17,6 +18,7 @@ public class UpdateCategoryEndpoint : IEndpoint
             .Produces<Response<Category?>>();
         
     private static async Task<IResult> HandlerAsync(
+        ClaimsPrincipal user,
         ICategoryHandler handler,
         UpdateCategoryRequest request,
         long id)

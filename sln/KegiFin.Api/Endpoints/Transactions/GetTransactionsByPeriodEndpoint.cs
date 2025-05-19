@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using KegiFin.Api.Common.Api;
 using KegiFin.Core;
 using KegiFin.Core.Handlers;
@@ -19,6 +20,7 @@ public class GetTransactionsByPeriodEndpoint : IEndpoint
             .Produces<PagedResponse<List<Category>?>>();
         
     private static async Task<IResult> HandlerAsync(
+        ClaimsPrincipal user,
         ITransactionHandler handler,
         [FromQuery] DateTime? startDate = null,
         [FromQuery] DateTime? endDate = null,
@@ -27,7 +29,11 @@ public class GetTransactionsByPeriodEndpoint : IEndpoint
     {
         var request = new GetTransactionsByPeriodRequest
         {
-            UserId = "test1", PageNumber = pageNumber, PageSize = pageSize, StartDate = startDate, EndDate = endDate,
+            UserId = user.Identity?.Name ?? string.Empty,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            StartDate = startDate,
+            EndDate = endDate,
         };
         var result = await handler.GetTransactionsByPeriodAsync(request);
         return result.IsSuccess
