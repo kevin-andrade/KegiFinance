@@ -1,11 +1,5 @@
-using System.Security.Claims;
-using KegiFin.Api.Data;
+using KegiFin.Api.Common.Api;
 using KegiFin.Api.Endpoints;
-using KegiFin.Api.Handlers;
-using KegiFin.Api.Models;
-using KegiFin.Core.Handlers;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -22,80 +16,20 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
     builder.Host.UseSerilog();
-
-    var cnnString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
-    builder.Services.AddDbContext<AppDbContext>(x => { x.UseSqlServer(cnnString); });
-
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(x => { x.CustomSchemaIds(y => y.FullName); });
-    builder.Services.AddTransient<ICategoryHandler, CategoryHandler>();
-    builder.Services.AddTransient<ITransactionHandler, TransactionHandler>();
-    
-    builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-    })
-        .AddCookie(IdentityConstants.ApplicationScheme);
-    builder.Services.AddAuthorization();
-    
-    builder.Services
-        .AddIdentityCore<User>()
-        .AddRoles<IdentityRole<long>>()
-        .AddEntityFrameworkStores<AppDbContext>()
-        .AddApiEndpoints();
+    builder.LoadConfiguration();
+    builder.LoadSecurity();
+    builder.LoadDataContexts();
+    builder.LoadDocumentation();
+    builder.LoadServices();
 
     var app = builder.Build();
 
     if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
-
-    app.UseAuthentication();
-    app.UseAuthorization();
-
-    app.MapGet("/", () => new {message = "Ok"});
+        app.ConfigureDevEnvironment();
+    
+    app.UseSecurity();
     app.MapEndpoints();
-    
-    app.MapGroup("v1/identity")
-        .WithTags("Identity")
-        .MapIdentityApi<User>();
-
-    app.MapGroup("v1/identity")
-        .WithTags("Identity")
-        .MapGet("/logout", async (SignInManager<User> signInManager) =>
-        {
-            await signInManager.SignOutAsync();
-            return Results.Ok();
-        })
-        .RequireAuthorization();
-    
-    app.MapGroup("v1/identity")
-        .WithTags("Identity")
-        .MapGet("/roles", (ClaimsPrincipal user) =>
-        {
-            if (user.Identity is null || !user.Identity.IsAuthenticated)
-                return Results.Unauthorized();
             
-            var identity = (ClaimsIdentity) user.Identity;
-            var roles = identity
-                .FindAll(identity.RoleClaimType)
-                .Select(c => new
-                {
-                    c.Issuer,
-                    c.OriginalIssuer,
-                    c.Type,
-                    c.Value,
-                    c.ValueType
-                });
-
-            return TypedResults.Json(roles);
-        })
-        .RequireAuthorization();
-
     app.Run();
 }
 catch (Exception e)
