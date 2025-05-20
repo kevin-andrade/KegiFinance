@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KegiFin.Core", "KegiFin.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KegiFin.Api", "KegiFin.Api\KegiFin.Api.csproj", "{D502C5AC-1D67-4E4F-9347-C40EC4F0C024}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KegiFin.Web", "..\KegiFin.Web\KegiFin.Web.csproj", "{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{D502C5AC-1D67-4E4F-9347-C40EC4F0C024}.Release|x64.Build.0 = Release|Any CPU
 		{D502C5AC-1D67-4E4F-9347-C40EC4F0C024}.Release|x86.ActiveCfg = Release|Any CPU
 		{D502C5AC-1D67-4E4F-9347-C40EC4F0C024}.Release|x86.Build.0 = Release|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Debug|x64.Build.0 = Debug|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Debug|x86.Build.0 = Debug|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Release|x64.ActiveCfg = Release|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Release|x64.Build.0 = Release|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Release|x86.ActiveCfg = Release|Any CPU
+		{7DFB0CF9-23A1-4F80-8B17-30F878D8FFBB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
