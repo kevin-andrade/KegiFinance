@@ -15,12 +15,29 @@ public static class BuilderExtension
         Configuration.ConnectionString = builder
             .Configuration
             .GetConnectionString("DefaultConnection") ?? string.Empty;
+
+        Configuration.FrontendUrl = builder.Configuration.GetValue<string>("FrontendUrl") ?? string.Empty;
+        Configuration.BackendUrl = builder.Configuration.GetValue<string>("BackendUrl") ?? string.Empty;
     }
 
     public static void LoadDocumentation(this WebApplicationBuilder builder)
     {
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(x => { x.CustomSchemaIds(y => y.FullName); });
+    }
+
+    public static void LoadCrossOrigin(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddCors(options => options.AddPolicy(
+            ApiConfiguration.CorsPolicyName,
+            policy => policy
+                .WithOrigins([
+                    Configuration.FrontendUrl, Configuration.BackendUrl
+                ])
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+        ));
     }
 
     public static void LoadSecurity(this WebApplicationBuilder builder)

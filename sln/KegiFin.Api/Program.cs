@@ -1,3 +1,4 @@
+using KegiFin.Api;
 using KegiFin.Api.Common.Api;
 using KegiFin.Api.Endpoints;
 using Serilog;
@@ -19,6 +20,7 @@ try
     builder.LoadConfiguration();
     builder.LoadSecurity();
     builder.LoadDataContexts();
+    builder.LoadCrossOrigin();
     builder.LoadDocumentation();
     builder.LoadServices();
 
@@ -26,7 +28,8 @@ try
 
     if (app.Environment.IsDevelopment())
         app.ConfigureDevEnvironment();
-    
+
+    app.UseCors(ApiConfiguration.CorsPolicyName);
     app.UseSecurity();
     app.MapEndpoints();
             
