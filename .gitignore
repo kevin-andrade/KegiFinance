@@ -485,3 +485,6 @@ $RECYCLE.BIN/
 
 # Serilog
 logs
+
+# Migrations
+Migrations
