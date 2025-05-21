@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using KegiFin.Api.Common.Api;
+using KegiFin.Core.Models.Account;
 
 namespace KegiFin.Api.Endpoints.Identity;
 
@@ -17,13 +18,13 @@ public class GetRolesIdentityEndpoint : IEndpoint
         var identity = (ClaimsIdentity) user.Identity;
         var roles = identity
             .FindAll(identity.RoleClaimType)
-            .Select(c => new
+            .Select(c => new RoleClaim()
             {
-                c.Issuer,
-                c.OriginalIssuer,
-                c.Type,
-                c.Value,
-                c.ValueType
+                Issuer = c.Issuer,
+                OriginalIssuer = c.OriginalIssuer,
+                Type = c.Type,
+                Value = c.Value,
+                ValueType = c.ValueType
             });
 
         return Task.FromResult<IResult>(TypedResults.Json(roles));
