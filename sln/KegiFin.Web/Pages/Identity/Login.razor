@@ -1,0 +1,54 @@
+@page "/login"
+
+@layout HeadlessLayout
+
+<PageTitle>KegiFin - Login</PageTitle>
+
+<MudGrid Justify="Justify.Center">
+    <MudItem xs="12" sm="12" md="8" lg="6" xl="6" xxl="6">
+        <MudPaper Class="mud-width-full pa-8">
+            <div class="d-flex justify-center pt-5">
+                <img
+                    src="imgs/Kegifin.png"
+                    alt="KegiFin Web - Financial management"
+                    width="250"/>
+            </div>
+            
+            <MudForm @ref="_mudForm">
+                <MudTextField 
+                    T="string"
+                    Label="E-mail"
+                    InputType="InputType.Email"
+                    Required="true"
+                    RequiredError="Please enter the Email"
+                    Validation="@(new EmailAddressAttribute {ErrorMessage= "Invalid email" } )"
+                />
+                
+                <MudTextField 
+                    T="string"
+                    Label="Password"
+                    InputType="InputType.Password"
+                    Required="true"
+                    RequiredError="Please enter the Password"
+                    Validation="@(new RequiredAttribute {ErrorMessage= "Please enter the Password" } )"
+                />
+            </MudForm>
+            
+            <div class="d-flex mt-5">
+                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="mr-10">
+                    Log In
+                </MudButton>
+                <MudSpacer />
+                <MudButton Href="/register" Variant="Variant.Outlined">
+                    Register
+                </MudButton>
+            </div>
+            
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code
+{
+    MudForm? _mudForm;
+}
