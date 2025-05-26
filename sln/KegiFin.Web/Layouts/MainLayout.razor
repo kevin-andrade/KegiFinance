@@ -7,10 +7,25 @@
     <Authorized>
         <MudLayout>
             <MudAppBar>
+                <MudIconButton
+                    Icon="@Icons.Material.Filled.Menu"
+                    Color="Color.Inherit"
+                    Edge="Edge.Start"
+                    @onclick="ToggleDrawer"
+                    />
                 KegiFin
                 <MudSpacer/>
-                <MudSwitch @bind-Value="@_isDarkMode"/>
+                <MudText Typo="Typo.caption">Welcome @context.User.Identity?.Name</MudText>
+                <MudSwitch 
+                    @bind-Value="@_isDarkMode"
+                    Color="Color.Inherit"
+                    T="bool"
+                    Class="ma-4"
+                    ThumbIcon="@Icons.Material.Filled.Lightbulb"/>
             </MudAppBar>
+            <MudDrawer @bind-Open="@_isDrawerOpened">
+                <NavMenu />
+            </MudDrawer>
 
             <MudMainContent>
                 <MudContainer>
@@ -28,6 +43,7 @@
 
 @code
 {
+    private bool _isDrawerOpened = true;
     private bool _isDarkMode = true;
     private readonly MudThemeProvider _mudThemeProvider = null!;
 
@@ -45,6 +61,11 @@
         _isDarkMode = newValue;
         StateHasChanged();
         return Task.CompletedTask;
+    }
+
+    private void ToggleDrawer()
+    {
+        _isDrawerOpened = !_isDrawerOpened;
     }
     
 }
