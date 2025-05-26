@@ -3,20 +3,28 @@
 <MudThemeProvider @bind-IsDarkMode="_isDarkMode" Theme="Configuration.Theme" />
 <MudSnackbarProvider />
 
-<MudLayout>
-    
-    <MudAppBar>
-        KegiFin
-        <MudSpacer/>
-        <MudSwitch @bind-Value="@_isDarkMode"/>
-    </MudAppBar>
-    
-    <MudMainContent>
-        <MudContainer>
-            @Body
-        </MudContainer>
-    </MudMainContent>
-</MudLayout>
+<AuthorizeView>
+    <Authorized>
+        <MudLayout>
+            <MudAppBar>
+                KegiFin
+                <MudSpacer/>
+                <MudSwitch @bind-Value="@_isDarkMode"/>
+            </MudAppBar>
+
+            <MudMainContent>
+                <MudContainer>
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </MudLayout>        
+    </Authorized>
+
+    <NotAuthorized>
+        <LoginRedirect />
+    </NotAuthorized>
+</AuthorizeView>
+
 
 @code
 {

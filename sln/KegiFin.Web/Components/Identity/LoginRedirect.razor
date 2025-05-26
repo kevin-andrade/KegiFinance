@@ -1,0 +1,16 @@
+@inject NavigationManager NavigationManager
+
+<MudPaper Class="d-flex flex-column justify-center align-items-center" Style="height: 100vh;">
+    <MudProgressCircular Indeterminate="true" Color="Color.Primary" Size="Size.Large" />
+    <MudText Typo="Typo.h5" Class="mt-4">Redirecting to login...</MudText>
+</MudPaper>
+
+@code {
+    protected override void OnInitialized()
+    {
+        _ = Task.Delay(1500).ContinueWith(_ =>
+        {
+            NavigationManager.NavigateTo("/login");
+        });
+    }
+}

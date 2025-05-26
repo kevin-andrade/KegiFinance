@@ -6,7 +6,7 @@ using MudBlazor;
 
 namespace KegiFin.Web.Pages.Identity;
 
-public partial class RegisterPage : ComponentBase
+public class LoginPage : ComponentBase
 {
     #region DependencyInjection
     
@@ -27,7 +27,7 @@ public partial class RegisterPage : ComponentBase
     #region Properties
 
     public bool IsBusy { get; set; } = false;
-    public RegisterAccountRequest InputModel { get; set; } = new();
+    public LoginAccountRequest InputModel { get; set; } = new();
 
     #endregion
     
@@ -39,7 +39,7 @@ public partial class RegisterPage : ComponentBase
         var user = authState.User;
         
         if (user.Identity is not null && user.Identity.IsAuthenticated)
-            NavigationManager.NavigateTo("/login");
+            NavigationManager.NavigateTo("/");
     }
 
     #endregion
@@ -52,14 +52,13 @@ public partial class RegisterPage : ComponentBase
 
         try
         {
-            var result = await AccountHandler.RegisterAccountAsync(InputModel);
+            var result = await AccountHandler.LoginAccountAsync(InputModel);
 
             if (result.IsSuccess)
             {
-                Snackbar.Add(
-                    result.Message ?? "An error occurred during registration.",
-                    Severity.Success);
-                NavigationManager.NavigateTo("/login");
+                await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                AuthenticationStateProvider.NotifyAuthenticationStateChanged();
+                NavigationManager.NavigateTo("/");
             }
             else
                 Snackbar.Add(result.Message ?? string.Empty, Severity.Error);
@@ -75,5 +74,4 @@ public partial class RegisterPage : ComponentBase
     }
 
     #endregion
-    
 }

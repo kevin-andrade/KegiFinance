@@ -1,6 +1,7 @@
 @page "/login"
 
 @layout HeadlessLayout
+@inherits LoginPage
 
 <PageTitle>KegiFin - Login</PageTitle>
 
@@ -14,41 +15,43 @@
                     width="250"/>
             </div>
             
-            <MudForm @ref="_mudForm">
-                <MudTextField 
+            <EditForm Model="InputModel" OnValidSubmit="OnValidSubmitAsync">
+                <DataAnnotationsValidator />
+                
+                <MudTextField
                     T="string"
                     Label="E-mail"
+                    HelperText="Mandatory field"
                     InputType="InputType.Email"
-                    Required="true"
-                    RequiredError="Please enter the Email"
-                    Validation="@(new EmailAddressAttribute {ErrorMessage= "Invalid email" } )"
-                />
-                
-                <MudTextField 
+                    For="@(() => InputModel.Email)"
+                    @bind-Value="@InputModel.Email" />
+
+                <MudTextField
                     T="string"
                     Label="Password"
+                    HelperText="Mandatory field"
                     InputType="InputType.Password"
-                    Required="true"
-                    RequiredError="Please enter the Password"
-                    Validation="@(new RequiredAttribute {ErrorMessage= "Please enter the Password" } )"
-                />
-            </MudForm>
-            
-            <div class="d-flex mt-5">
-                <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="mr-10">
-                    Log In
-                </MudButton>
-                <MudSpacer />
-                <MudButton Href="/register" Variant="Variant.Outlined">
-                    Register
-                </MudButton>
-            </div>
+                    For="@(() => InputModel.Password)"
+                    @bind-Value="@InputModel.Password" />
+                
+                <div class="d-flex mt-5">
+                    @if (IsBusy)
+                    {
+                        <MudProgressCircular Color="Color.Info" Indeterminate="true" />
+                    }
+                    else
+                    {
+                        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Variant="Variant.Filled" Class="mr-10">
+                            Sign In
+                        </MudButton>
+                        <MudSpacer />
+                        <MudButton Href="/register" Variant="Variant.Outlined">
+                            Create Account
+                        </MudButton>
+                    }
+                </div>
+            </EditForm>
             
         </MudPaper>
     </MudItem>
 </MudGrid>
-
-@code
-{
-    MudForm? _mudForm;
-}

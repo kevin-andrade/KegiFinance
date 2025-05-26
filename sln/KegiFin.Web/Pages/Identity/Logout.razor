@@ -1,0 +1,20 @@
+@page "/logout"
+@inherits LogoutPage
+@layout HeadlessLayout
+
+<PageTitle>KegiFin - Logout</PageTitle>
+
+<MudText Typo="Typo.h3">Logging out...</MudText>
+<MudPaper Class="pa-8 mt-4">
+    <div class="d-flex justify-center pb-8 pt-8">
+        <img src="imgs/Kegifin.png" alt="KegiFin Web - Financial management" width="250"/>
+    </div>
+    <MudAlert Severity="Severity.Info">
+        <div>
+            Session finished...
+            <MudButton Variant="Variant.Text" Href="/login">
+                GO TO LOGIN SCREEN
+            </MudButton>
+        </div>
+    </MudAlert>
+</MudPaper>
