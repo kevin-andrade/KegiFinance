@@ -43,7 +43,7 @@ public class CookieAuthenticationStateProvider(IHttpClientFactory httpClientFact
         {
             return await _client.GetFromJsonAsync<User?>("v1/identity/manage/info");
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return null;
         }
@@ -69,7 +69,7 @@ public class CookieAuthenticationStateProvider(IHttpClientFactory httpClientFact
         {
             roles = await _client.GetFromJsonAsync<RoleClaim[]>("v1/identity/roles");
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return claims;
         }
