@@ -143,7 +143,7 @@ public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logg
             var categories = await query
                 .Skip((request.PageNumber - 1)  * request.PageSize)
                 .Take(request.PageSize)
-                .ToListAsync();;
+                .ToListAsync();
             
             var totalCount = await query.CountAsync();
             

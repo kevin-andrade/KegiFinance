@@ -24,11 +24,13 @@ builder.Services.AddScoped(x => (ICookieAuthenticationStateProvider)x.GetRequire
 
 builder.Services.AddMudServices();
 
-builder.Services.AddTransient<IAccountHandler, AccountHandler>();
-
 builder.Services.AddHttpClient(Configuration.HttpClientName, opt =>
 {
     opt.BaseAddress = new Uri(Configuration.BackendUrl);
 }).AddHttpMessageHandler<CookieHandler>();
+
+builder.Services.AddTransient<IAccountHandler, AccountHandler>();
+builder.Services.AddTransient<ICategoryHandler, CategoryHandler>();
+builder.Services.AddTransient<ITransactionHandler, TransactionHandler>();
 
 await builder.Build().RunAsync();
