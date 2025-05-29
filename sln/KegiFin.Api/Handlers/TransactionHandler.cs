@@ -1,5 +1,6 @@
 using KegiFin.Api.Data;
 using KegiFin.Core.Common.Extensions;
+using KegiFin.Core.Enums;
 using KegiFin.Core.Handlers;
 using KegiFin.Core.Models;
 using KegiFin.Core.Requests.Transactions;
@@ -12,6 +13,9 @@ public class TransactionHandler(AppDbContext context, ILogger<TransactionHandler
 {
     public async Task<Response<Transaction?>> CreateTransactionAsync(CreateTransactionRequest request)
     {
+        if (request is {Type: ETransactionType.Withdraw, Amount: >=0})
+            request.Amount *= -1;
+        
         try
         {
             var transaction = new Transaction
@@ -45,6 +49,9 @@ public class TransactionHandler(AppDbContext context, ILogger<TransactionHandler
 
     public async Task<Response<Transaction?>> UpdateTransactionAsync(UpdateTransactionRequest request)
     {
+        if (request is {Type: ETransactionType.Withdraw, Amount: >0})
+            request.Amount *= -1;
+        
         try
         {
             var transaction = await context
