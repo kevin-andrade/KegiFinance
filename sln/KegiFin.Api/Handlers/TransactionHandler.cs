@@ -21,7 +21,7 @@ public class TransactionHandler(AppDbContext context, ILogger<TransactionHandler
                 Type = request.Type,
                 Amount = request.Amount,
                 CategoryId = request.CategoryId,
-                PaidOrReceivedAt = request.PaideOrReceivedAt
+                PaidOrReceivedAt = request.PaidOrReceivedAt
             };
             
             await context.Transactions.AddAsync(transaction);
