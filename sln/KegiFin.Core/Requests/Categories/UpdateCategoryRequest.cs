@@ -11,5 +11,5 @@ public class UpdateCategoryRequest : BaseRequest
     
     [Required(ErrorMessage = "Description invalid")]
     [StringLength(250, ErrorMessage = "The description must be a maximum of 250 characters.")]   
-    public string Description { get; set; } = string.Empty;
+    public string? Description { get; set; }
 }
