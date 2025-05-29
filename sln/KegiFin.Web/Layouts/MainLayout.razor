@@ -3,6 +3,7 @@
 <MudThemeProvider @bind-IsDarkMode="_isDarkMode" Theme="Configuration.Theme" />
 <MudSnackbarProvider />
 <MudDialogProvider />
+<MudPopoverProvider />
 
 <AuthorizeView>
     <Authorized>
@@ -46,11 +47,11 @@
 {
     private bool _isDrawerOpened = true;
     private bool _isDarkMode = true;
-    private readonly MudThemeProvider _mudThemeProvider = null!;
+    private readonly MudThemeProvider? _mudThemeProvider = null!;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (firstRender && _mudThemeProvider is not null)
         {
             _isDarkMode = await _mudThemeProvider.GetSystemPreference();
             await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
