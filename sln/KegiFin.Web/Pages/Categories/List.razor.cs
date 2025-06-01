@@ -8,7 +8,7 @@ namespace KegiFin.Web.Pages.Categories;
 
 public partial class ListCategoriesPage : ComponentBase
 {
-    #region Propperties
+    #region Properties
 
     public bool IsBusy { get; set; } = false;
     protected List<Category> Categories = [];
