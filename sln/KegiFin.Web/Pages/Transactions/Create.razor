@@ -1,0 +1,87 @@
+@page "/transactions/create"
+
+@using KegiFin.Core.Enums
+@inherits CreateTransactionPage
+
+<MudText Typo="Typo.h3">New Transaction</MudText>
+@if (IsBusy)
+{
+    <div class="d-flex justify-center pa-10">
+        <MudProgressCircular Indeterminate="true" Size="Size.Large" Color="Color.Primary" />
+    </div>
+}
+else
+{
+    <MudPaper Class="pa-8 mt-4">
+    <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+        <DataAnnotationsValidator />
+        
+        <MudTextField 
+            Label="Name"
+            HelperText="The name of the transaction"
+            Required="true"
+            @bind-Value="@InputModel.Name"
+            For="@(() => InputModel.Name)"
+            Clearable="true"
+            Class="mb-5"
+        />
+        
+        <MudTextField 
+            Label="Amount"
+            T="decimal"
+            Format="C"
+            HelperText="Enter the transaction amount"
+            Required="true"
+            @bind-Value="@InputModel.Amount"
+            For="@(() => InputModel.Amount)"
+            Variant="Variant.Text"
+            Clearable="true"
+            Class="mb-4"
+        />
+        
+        <MudDatePicker 
+            Label="Date of Payment or Receipt"
+            HelperText="Select the date and time of the transaction"
+            @bind-Date="@InputModel.PaidOrReceivedAt"
+            For="@(() => InputModel.PaidOrReceivedAt)"
+            Class="mb-5"
+        />
+        
+        <MudSelect 
+            Label="Transaction Type"
+            T="ETransactionType"
+            Required="true"
+            @bind-Value="InputModel.Type"
+            AnchorOrigin="Origin.BottomRight"
+            Dense="true"
+            Variant="Variant.Filled"
+            FullWidth="true"
+            Class="mb-5">
+            
+            <MudSelectItem T="ETransactionType" Value="ETransactionType.Deposit">Deposit</MudSelectItem>
+            <MudSelectItem T="ETransactionType" Value="ETransactionType.Withdraw">Withdraw</MudSelectItem>
+        </MudSelect>
+        
+        <MudSelect
+            Label="Category"
+            T="long"
+            Required="true"
+            @bind-Value="InputModel.CategoryId"
+            AnchorOrigin="Origin.BottomRight"
+            Dense="true"
+            Variant="Variant.Filled">
+            
+            <MudSelectItem T="long" Value="0" Disabled="true">-- Select a category --</MudSelectItem>
+            @foreach (var category in Categories)
+            {
+                <MudSelectItem T="long" Value="@category.Id">
+                    @category.Name
+                </MudSelectItem>
+            }
+        </MudSelect>
+        
+        <MudButton ButtonType="ButtonType.Submit" Disabled="IsBusy" Color="Color.Primary" Class="mt-3" EndIcon="@Icons.Material.Filled.Save">Save</MudButton>
+    </EditForm>
+</MudPaper>
+}
+
