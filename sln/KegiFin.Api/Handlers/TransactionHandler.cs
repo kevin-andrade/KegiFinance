@@ -73,7 +73,7 @@ public class TransactionHandler(AppDbContext context, ILogger<TransactionHandler
             
             logger.LogInformation($"Transaction successfully updated Id: {transaction.Id}");
             
-            return new Response<Transaction?>(transaction, "Transaction created successfully");
+            return new Response<Transaction?>(transaction, "Transaction successfully updated");
             
         }
         catch (Exception e)
