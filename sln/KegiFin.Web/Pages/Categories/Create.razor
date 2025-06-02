@@ -2,34 +2,44 @@
 
 @inherits CreateCategoryPage
 
+
 <MudText Typo="Typo.h3">Create a category</MudText>
-<MudPaper Class="pa-8 mt-4">
-    <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
-        <DataAnnotationsValidator />
+@if (IsBusy)
+{
+    <div class="d-flex justify-center pa-10">
+        <MudProgressCircular Indeterminate="true" Size="Size.Large" Color="Color.Primary" />
+    </div>
+}
+else
+{
+    <MudPaper Class="pa-8 mt-4">
+        <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+            <DataAnnotationsValidator />
         
-        <MudTextField 
-            Label="Name"
-            HelperText="The name of the category"
-            Required="true"
-            @bind-Value="@InputModel.Name"
-            For="@(() => InputModel.Name)"
-            Clearable="true"
-            Immediate="true"
-            Class="mb-5"
-        />
+            <MudTextField 
+                Label="Name"
+                HelperText="The name of the category"
+                Required="true"
+                @bind-Value="@InputModel.Name"
+                For="@(() => InputModel.Name)"
+                Clearable="true"
+                Immediate="true"
+                Class="mb-5"
+            />
         
-        <MudTextField 
-            Label="Description"
-            Lines="5"
-            HelperText="The description of the category"
-            @bind-Value="@InputModel.Description"
-            For="@(() => InputModel.Description)"
-            Variant="Variant.Outlined"
-            Placeholder="Write the category description here..."
-            Clearable="true"
-            Immediate="true"
-        />
+            <MudTextField 
+                Label="Description"
+                Lines="5"
+                HelperText="The description of the category"
+                @bind-Value="@InputModel.Description"
+                For="@(() => InputModel.Description)"
+                Variant="Variant.Outlined"
+                Placeholder="Write the category description here..."
+                Clearable="true"
+                Immediate="true"
+            />
         
-        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Class="mt-3" EndIcon="@Icons.Material.Filled.Save">Save</MudButton>
-    </EditForm>
-</MudPaper>
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" Class="mt-3" EndIcon="@Icons.Material.Filled.Save">Save</MudButton>
+        </EditForm>
+    </MudPaper>
+}
