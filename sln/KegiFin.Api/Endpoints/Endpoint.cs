@@ -1,6 +1,7 @@
 using KegiFin.Api.Common.Api;
 using KegiFin.Api.Endpoints.Categories;
 using KegiFin.Api.Endpoints.Identity;
+using KegiFin.Api.Endpoints.Reports;
 using KegiFin.Api.Endpoints.Transactions;
 using KegiFin.Api.Models;
 
@@ -42,6 +43,14 @@ public static class Endpoint
             .WithTags("Identity")
             .MapEndpoint<LogoutIdentityEndpoint>()
             .MapEndpoint<GetRolesIdentityEndpoint>();
+
+        endpoints.MapGroup("v1/reports")
+            .RequireAuthorization()
+            .WithTags("Reports")
+            .MapEndpoint<GetExpensesByCategoryEndpoint>()
+            .MapEndpoint<GetFinancialSummaryEndpoint>()
+            .MapEndpoint<GetIncomesAndExpensesEndpoint>()
+            .MapEndpoint<GetIncomesByCategoryEndpoint>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<TEndpoint>(this IEndpointRouteBuilder app)
