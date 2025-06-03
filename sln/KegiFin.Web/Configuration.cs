@@ -5,6 +5,9 @@ namespace KegiFin.Web;
 public static class Configuration
 {
     public const string HttpClientName = "KegiFin";
+    
+    //API ROUTES BASE URL
+    public const string ReportsBaseUrl = "v1/reports";
     public static string BackendUrl { get; set; } = null!;
 
     public static MudTheme Theme = new()
@@ -51,4 +54,5 @@ public static class Configuration
             Error = "#EF5350" // Vermelho claro para melhor contraste no escuro
         },
     };
+    
 }
