@@ -1,7 +1,56 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@inherits HomePageComponent
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+<MudGrid Justify="Justify.Center" Class="mt-5">
+    <MudItem lg="6" md="12" sm="12" xs="12">
+        <MudCard Class="pa-8">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Financial Summary</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudIconButton
+                        Icon="@(
+                              ShowValues
+                                  ? Icons.Material.TwoTone.VisibilityOff
+                                  : Icons.Material.TwoTone.Visibility)"
+                        OnClick="ToggleShowValues"/>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <FinancialSummaryCard ShowValues="@ShowValues"/>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem lg="6" md="6" sm="12" xs="12">
+        <MudCard Class="pa-8">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">Incomes and Expenses</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <IncomesAndExpensesChart/>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem lg="6" md="6" sm="12" xs="12">
+        <MudCard Class="pa-8">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">Incomes by Category</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <IncomesByCategoryChart/>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem lg="6" md="6" sm="12" xs="12">
+        <MudCard Class="pa-8">
+            <MudCardHeader>
+                <MudText Typo="Typo.h6">Expenses by Category</MudText>
+            </MudCardHeader>
+            <MudCardContent>
+                <ExpensesByCategoryChart/>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>

@@ -19,40 +19,45 @@ public static class Configuration
                 FontFamily = ["Raleway", "sans-serif"]
             }
         },
+
+        // LIGHT MODE
         PaletteLight = new PaletteLight
         {
-            Primary = "#5C6BC0", // Roxo moderno (botões, foco)
-            Secondary = "#43A047", // Verde escuro (conecta com o logo)
-            Background = "#FFFFFF", // Fundo branco puro
-            Surface = "#FAFAFA", // Leve contraste nos cartões
+            Primary = "#4CAF50",              // Verde equilibrado
+            Secondary = "#212121",            // Preto suave para contrastes
+            Background = "#FFFFFF",           // Fundo branco
+            Surface = "#F5F5F5",              // Cartões e containers
             AppbarBackground = "#FFFFFF",
             AppbarText = "#212121",
-            DrawerBackground = "#F3F3F3",
+            DrawerBackground = "#FAFAFA",
             DrawerText = "#212121",
             TextPrimary = "#212121",
-            TextSecondary = "#616161",
-            ActionDefault = "#616161",
+            TextSecondary = "#757575",
+            ActionDefault = "#757575",
             ActionDisabled = "#BDBDBD",
             ActionDisabledBackground = "#E0E0E0",
             Error = "#D32F2F"
         },
+
+        // DARK MODE
         PaletteDark = new PaletteDark
         {
-            Primary = "#5C6BC0", // Roxo
-            Secondary = "#66BB6A", // Verde suave
-            Background = "#121212", // Fundo escuro
+            Primary = "#66BB6A",               // Verde mais claro
+            Secondary = "#EEEEEE",            // Texto secundário mais claro
+            Background = "#121212",
             Surface = "#1E1E1E",
             AppbarBackground = "#1E1E1E",
             AppbarText = "#FFFFFF",
-            DrawerBackground = "#212121",
+            DrawerBackground = "#1C1C1C",
             DrawerText = "#FFFFFF",
             TextPrimary = "#FFFFFF",
             TextSecondary = "#B0BEC5",
             ActionDefault = "#B0BEC5",
-            ActionDisabled = "#616161",
+            ActionDisabled = "#757575",
             ActionDisabledBackground = "#424242",
-            Error = "#EF5350" // Vermelho claro para melhor contraste no escuro
+            Error = "#EF5350"
         },
     };
+
     
 }

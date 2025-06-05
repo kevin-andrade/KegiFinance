@@ -1,0 +1,44 @@
+@inherits FinancialSummaryCardComponent
+
+<p>
+    <strong>BALANCE</strong>
+</p>
+@if (Summary is null)
+{
+    <div class="d-flex align-center justify-center" style="height: 350px">
+        <MudProgressCircular Indeterminate="true" Color="Color.Primary"/>
+    </div>
+}
+else if (Summary.Total == 0 && Summary.Incomes == 0 && Summary.Expenses == 0)
+{
+    <MudText Color="Color.Secondary" Typo="Typo.subtitle1">
+        No data available for the selected period.
+    </MudText>
+}
+else
+{
+    @if (Summary.Total > 0)
+    {
+        <MudText Color="Color.Primary" Typo="Typo.h3">
+            @(FormatValue(Summary.Total))
+        </MudText>
+    }
+    else
+    {
+        <MudText Color="Color.Error" Typo="Typo.h3">
+            @(FormatValue(Summary.Total))
+        </MudText>
+    }
+
+    <br/>
+    <MudText Typo="Typo.subtitle1">Incomes</MudText>
+    <MudText Color="Color.Success">
+        @(FormatValue(Summary.Incomes))
+    </MudText>
+
+    <br/>
+    <MudText Typo="Typo.subtitle1">Expenses</MudText>
+    <MudText Color="Color.Error">
+        @(FormatValue(Summary.Expenses))
+    </MudText>
+}
