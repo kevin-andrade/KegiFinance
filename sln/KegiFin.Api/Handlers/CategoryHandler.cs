@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KegiFin.Api.Handlers;
 
-public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logger) : ICategoryHandler
+public class CategoryHandler(IAppDbContext context, ILogger<CategoryHandler> logger) : ICategoryHandler
 {
     public async Task<Response<Category?>> CreateCategoryAsync(CreateCategoryRequest request)
     {
@@ -49,6 +49,7 @@ public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logg
 
             if (category is null)
             {
+                logger.LogWarning($"Category not found Id: {request.Id} UserId: {request.UserId}");
                 return new Response<Category?>(null, "Category not found", 404);
             }
             
@@ -66,10 +67,10 @@ public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logg
         {
             logger.LogError(
                 e,
-                "Error update category userId: {userId} | Name: {name}",
+                "Error updating category userId: {userId} | Name: {name}",
                 request.UserId, request.Name);
             
-            return new Response<Category?>(null, "Error update category", 500);
+            return new Response<Category?>(null, "Error updating category", 500);
         }
     }
 
@@ -84,6 +85,7 @@ public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logg
 
             if (category is null)
             {
+                logger.LogWarning($"Category not found Id: {request.Id} UserId: {request.UserId}");
                 return new Response<Category?>(null, "Category not found", 404);
             }
             
@@ -98,10 +100,10 @@ public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logg
         {
             logger.LogError(
                 e,
-                "Error delete category userId: {userId} | Id: {name}",
-                request.UserId, request.Id);
+                "Error deleting category Id: {id} | UserId: {userId}",
+                request.Id, request.UserId);
             
-            return new Response<Category?>(null, "Error update category", 500);
+            return new Response<Category?>(null, "Error category deleted", 500);
         }
     }
 
@@ -123,8 +125,8 @@ public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logg
         {
             logger.LogError(
                 e,
-                "Error load category by Id: {userId} | Id: {name}",
-                request.UserId, request.Id);
+                "Error load category by Id: {Id} | UserId: {UserId}",
+                request.Id, request.UserId);
             
             return new Response<Category?>(null, "Error load category", 500);
         }
@@ -157,7 +159,7 @@ public class CategoryHandler(AppDbContext context, ILogger<CategoryHandler> logg
         {
             logger.LogError(
                 e,
-                "Error loading all user categories: {userId}",
+                "Error load all categories userId: {UserId}",
                 request.UserId);
             
             return new PagedResponse<List<Category>>(null, "Error load all categories", 500);

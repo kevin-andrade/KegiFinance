@@ -4,7 +4,7 @@ namespace KegiFin.Core.Requests.Accounts;
 
 public class LoginAccountRequest : BaseRequest
 {
-    [Required(ErrorMessage = "E-mail")]
+    [Required(ErrorMessage = "E-mail is required")]
     [EmailAddress(ErrorMessage = "E-mail invalid")]
     public string Email { get; set; } = string.Empty;
     

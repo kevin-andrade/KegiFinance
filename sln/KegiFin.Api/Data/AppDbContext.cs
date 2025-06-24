@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KegiFin.Api.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) 
-    : IdentityDbContext<
+public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<
     User,
     IdentityRole<long>,
     long,
@@ -18,9 +17,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     IdentityUserLogin<long>,
     IdentityRoleClaim<long>,
     IdentityUserToken<long>
-    >(options)
+>(options), IAppDbContext
 {
-    public DbSet<Category> Categories { get; set; } = null!;
+    public virtual DbSet<Category> Categories { get; set; } = null!;
     public DbSet<Transaction> Transactions { get; set; } = null!;
     public DbSet<ExpensesByCategory> ExpensesByCategories { get; set; } = null!;
     public DbSet<IncomesByCategory> IncomesByCategories { get; set; } = null!;
@@ -30,7 +29,4 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
-    
-    
-    
 }
