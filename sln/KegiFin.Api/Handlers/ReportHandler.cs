@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KegiFin.Api.Handlers;
 
-public class ReportHandler(AppDbContext context, ILogger<ReportHandler> logger) : IReportHandler
+public class ReportHandler(IAppDbContext context, ILogger<ReportHandler> logger) : IReportHandler
 {
     public async Task<Response<List<IncomesAndExpenses>?>> GetIncomesAndExpensesReportAsync(GetIncomesAndExpensesRequest request)
     {
@@ -27,9 +27,10 @@ public class ReportHandler(AppDbContext context, ILogger<ReportHandler> logger) 
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error loading Incomes and Expenses report");
             
-            return new Response<List<IncomesAndExpenses>?>(null, "Error loading Incomes and Expenses report", 500);
+            logger.LogError(e, "Error loading Incomes and Expenses");
+            
+            return new Response<List<IncomesAndExpenses>?>(null, "Error loading Incomes and Expenses", 500);
         }
     }
 
