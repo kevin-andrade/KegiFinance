@@ -1,7 +1,9 @@
 using KegiFin.Api.Handlers;
 using KegiFin.Tests.Unit.Api.Handlers.Reports.TestUtils.Requests;
 using KegiFin.Tests.Unit.Api.Handlers.Reports.TestUtils.Seeds;
-using KegiFin.Tests.Unit.Helpers.Mocking;
+using KegiFin.Tests.Unit.Helpers.Mocking.Db.Query;
+using KegiFin.Tests.Unit.Helpers.Mocking.Logging;
+using KegiFin.Tests.Unit.Helpers.Testing;
 using Microsoft.Extensions.Logging;
 
 namespace KegiFin.Tests.Unit.Api.Handlers.Reports.Get;
@@ -14,7 +16,7 @@ public class GetExpensesByCategoryHandlerTests
         // Arrange
         var expensesByCategory = ReportSeed.GetExpensesByCategorySingle();
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(expensesByCategory, x => x.ExpensesByCategories);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateExpensesByCategoryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -49,7 +51,7 @@ public class GetExpensesByCategoryHandlerTests
         // Arrange
         var expensesByCategory = ReportSeed.GetOrderByYearAndCategoryExpenses();
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(expensesByCategory, x => x.ExpensesByCategories);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateExpensesByCategoryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -80,7 +82,7 @@ public class GetExpensesByCategoryHandlerTests
     public async Task GetExpensesByCategoryReportAsync_EmptyDataRequest_ReturnsEmptyList()
     {
         var mockContext = QueryMockHelper.CreateMockDbContextWithData([], x => x.ExpensesByCategories);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateExpensesByCategoryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -100,11 +102,11 @@ public class GetExpensesByCategoryHandlerTests
     }
     
     [Fact]
-    public async Task GetExpensesByCategoryReportAsync_ExceptionThrown_ReturnsFailureWithMessage()
+    public async Task GetExpensesByCategoryReportAsync_ExceptionThrown_ReturnsFailure()
     {
         // Arrange
         var mockContext = QueryMockHelper.CreateMockDbContextWithException(x => x.ExpensesByCategories);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateExpensesByCategoryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>

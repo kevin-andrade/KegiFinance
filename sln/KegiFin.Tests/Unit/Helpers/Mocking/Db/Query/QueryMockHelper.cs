@@ -1,10 +1,10 @@
 using System.Linq.Expressions;
 using KegiFin.Api.Data;
+using KegiFin.Tests.Unit.Helpers.Mocking.Db.DbSet;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace KegiFin.Tests.Unit.Helpers.Mocking;
+namespace KegiFin.Tests.Unit.Helpers.Mocking.Db.Query;
 
 public static class QueryMockHelper
 {
@@ -16,6 +16,7 @@ public static class QueryMockHelper
         var mockSet = DbSetMockHelper.CreateMockDbSet(data);
         var mockContext = new Mock<IAppDbContext>();
         mockContext.Setup(dbSelector).Returns(mockSet.Object);
+        
         return mockContext;
     }
     
@@ -34,6 +35,4 @@ public static class QueryMockHelper
         
         return mockContext;
     }
-    
-    public static Mock<ILogger<TEntity>> GetMockLogger<TEntity>() => new();
 }

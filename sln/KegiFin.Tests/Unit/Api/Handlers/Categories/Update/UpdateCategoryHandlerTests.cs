@@ -1,6 +1,9 @@
+using KegiFin.Api.Handlers;
 using KegiFin.Core.Models;
 using KegiFin.Tests.Unit.Api.Handlers.Categories.TestUtils.Helpers;
-using KegiFin.Tests.Unit.Api.Handlers.Categories.TestUtils.Mocks;
+using KegiFin.Tests.Unit.Helpers.Mocking.Db.Crud;
+using KegiFin.Tests.Unit.Helpers.Mocking.Logging;
+using KegiFin.Tests.Unit.Helpers.Testing;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -22,11 +25,13 @@ public class UpdateCategoryHandlerTests
             Description = "Old Desc"
         });
 
-        var mockContext = CategoryUpdateMock.GetSuccessMock(_categories);
-        var mockLogger = CategoryUpdateMock.GetMockLogger();
-        var request = CategoryHandlerTestHelper.GetValidUpdateRequest(1, 123.ToString());
+        var mockContext = CrudMockHelper.CreateAsyncMockDbContext(_categories, x => x.Categories);
+        var mockLogger = LoggerMockHelper.GetMockLogger<CategoryHandler>();
+        var request = CategoryRequestFactory.GetValidUpdateRequest(1, 123.ToString());
 
-        var handler = CategoryHandlerTestHelper.CreateHandler(mockContext, mockLogger);
+        var handler = HandlerTestHelper<CategoryHandler>
+            .CreateHandler(mockContext, mockLogger,
+                (ctx, logger) => new CategoryHandler(ctx, logger));
         
         // Act
         var response = await handler.UpdateCategoryAsync(request);
@@ -45,19 +50,21 @@ public class UpdateCategoryHandlerTests
         mockContext.Verify(x => x.Categories.Update(It.IsAny<Category>()), Times.Once);
         mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         
-        CategoryHandlerTestHelper.VerifyLog(mockLogger, LogLevel.Information, $"Category successfully update Id: 1");
+        HandlerTestHelper<CategoryHandler>.VerifyLog(mockLogger,
+            LogLevel.Information, $"Category successfully update Id: 1");
     }
     
     [Fact]
-    public async Task UpdateCategoryAsync_WhenCategoryDoesNotExist_ShouldReturnFailureResponse()
+    public async Task UpdateCategoryAsync_WhenCategoryNotFound_ReturnsEmptyList()
     {
         // Arrange
-        var categories = new List<Category>(); //List empty
-        var mockContext = CategoryUpdateMock.GetNotFoundMock(categories); //Mock context with Not Found
-        var mockLogger = CategoryUpdateMock.GetMockLogger();
-        var request = CategoryHandlerTestHelper.GetValidUpdateRequest(1, 123.ToString());
+        var mockContext = CrudMockHelper.CreateAsyncMockDbContext([], x => x.Categories);
+        var mockLogger = LoggerMockHelper.GetMockLogger<CategoryHandler>();
+        var request = CategoryRequestFactory.GetValidUpdateRequest(1, 123.ToString());
         
-        var handler = CategoryHandlerTestHelper.CreateHandler(mockContext, mockLogger);
+        var handler = HandlerTestHelper<CategoryHandler>
+            .CreateHandler(mockContext, mockLogger,
+                (ctx, logger) => new CategoryHandler(ctx, logger));
         
         // Act
         var response = await handler.UpdateCategoryAsync(request);
@@ -70,27 +77,20 @@ public class UpdateCategoryHandlerTests
         mockContext.Verify(x => x.Categories.Update(It.IsAny<Category>()), Times.Never);
         mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         
-        CategoryHandlerTestHelper.VerifyLog(mockLogger, LogLevel.Warning, 
+        HandlerTestHelper<CategoryHandler>.VerifyLog(mockLogger, LogLevel.Warning, 
             $"Category not found Id: {request.Id} UserId: {request.UserId}");
     }
     
     [Fact]
-    public async Task UpdateCategoryAsync_WhenSaveChangesFails_ShouldReturnFailureResponse()
+    public async Task UpdateCategoryAsync_WhenSaveChangesFails_ReturnsFailure()
     {
-        // Arrange
-        _categories.Add(new Category
-        {
-            Id = 1,
-            UserId = 123.ToString(),
-            Name = "Old Name",
-            Description = "Old Desc"
-        });
+        var data = new List<Category> { new() { Id = 1, Name = "Dev", UserId = "123", Description = "Teste"} };
+        var mockContext = CrudMockHelper.CreateAsyncMockDbContextWithSaveFailure(data, x => x.Categories); //Mock context Fail save
+        var mockLogger = LoggerMockHelper.GetMockLogger<CategoryHandler>();
+        var request = CategoryRequestFactory.GetValidUpdateRequest();
         
-        var mockContext = CategoryUpdateMock.GetFailMock(_categories); //Mock context Fail save
-        var mockLogger = CategoryUpdateMock.GetMockLogger();
-        var request = CategoryHandlerTestHelper.GetValidUpdateRequest();
-        
-        var handler = CategoryHandlerTestHelper.CreateHandler(mockContext, mockLogger);
+        var handler = HandlerTestHelper<CategoryHandler>.CreateHandler(
+            mockContext, mockLogger, (ctx, logger) => new CategoryHandler(ctx, logger) );
         
         // Act
         var response = await handler.UpdateCategoryAsync(request);
@@ -102,8 +102,7 @@ public class UpdateCategoryHandlerTests
         
         mockContext.Verify(x => x.Categories.Update(It.IsAny<Category>()), Times.Once);
         mockContext.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        
-        CategoryHandlerTestHelper.VerifyLog(mockLogger, LogLevel.Error, 
+        HandlerTestHelper<CategoryHandler>.VerifyLog(mockLogger, LogLevel.Error, 
             $"Error updating category userId: {request.UserId} | Name: {request.Name}");
     }
 }

@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace KegiFin.Tests.Unit.Helpers.Mocking;
+namespace KegiFin.Tests.Unit.Helpers.Mocking.Db.DbSet;
 
 public class AsyncQueryProvider<TEntity>(IQueryProvider inner) : IAsyncQueryProvider
 {

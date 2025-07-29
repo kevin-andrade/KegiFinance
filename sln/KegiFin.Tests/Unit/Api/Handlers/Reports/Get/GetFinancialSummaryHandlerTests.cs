@@ -3,7 +3,9 @@ using KegiFin.Core.Enums;
 using KegiFin.Core.Models;
 using KegiFin.Tests.Unit.Api.Handlers.Reports.TestUtils.Requests;
 using KegiFin.Tests.Unit.Api.Handlers.Reports.TestUtils.Seeds;
-using KegiFin.Tests.Unit.Helpers.Mocking;
+using KegiFin.Tests.Unit.Helpers.Mocking.Db.Query;
+using KegiFin.Tests.Unit.Helpers.Mocking.Logging;
+using KegiFin.Tests.Unit.Helpers.Testing;
 using Microsoft.Extensions.Logging;
 
 namespace KegiFin.Tests.Unit.Api.Handlers.Reports.Get;
@@ -19,7 +21,7 @@ public class GetFinancialSummaryHandlerTests
         // Arrange
         var transactions = TransactionSeed.GetTransactions();
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(transactions, x => x.Transactions);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateFinancialSummaryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -52,7 +54,8 @@ public class GetFinancialSummaryHandlerTests
         Assert.Equal(expectedExpenses, response.Data.Expenses);
         Assert.Equal(expectedIncomes - expectedExpenses, response.Data.Total);
         
-        HandlerTestHelper<ReportHandler>.VerifyLog(mockLogger, LogLevel.Information, "Financial summary report successfully loaded");
+        HandlerTestHelper<ReportHandler>.VerifyLog(mockLogger, 
+            LogLevel.Information, "Financial summary report successfully loaded");
     }
 
     [Fact]
@@ -61,7 +64,7 @@ public class GetFinancialSummaryHandlerTests
         // Arrange
         var transactions = new List<Transaction>();
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(transactions, x => x.Transactions);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateFinancialSummaryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -92,7 +95,7 @@ public class GetFinancialSummaryHandlerTests
         // Arrange
         var transactions = TransactionSeed.GetTransactionsWithOtherUserOnly(); // userId: user-2
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(transactions, x => x.Transactions);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateFinancialSummaryRequest(); // userId: user-1
 
         var handler = HandlerTestHelper<ReportHandler>
@@ -123,7 +126,7 @@ public class GetFinancialSummaryHandlerTests
         // Arrange
         var transactions = TransactionSeed.GetOldTransactionsForUser(); // Old Transactions
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(transactions, x => x.Transactions);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateFinancialSummaryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -153,7 +156,7 @@ public class GetFinancialSummaryHandlerTests
     {
         // Arrange
         var mockContext = QueryMockHelper.CreateMockDbContextWithException(x => x.Transactions);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateFinancialSummaryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -171,5 +174,4 @@ public class GetFinancialSummaryHandlerTests
             LogLevel.Error, "Error loading Financial summary report");
         Assert.Equal("Error loading Financial summary report", response.Message);
     }
-
 }

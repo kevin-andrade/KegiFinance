@@ -2,7 +2,9 @@ using KegiFin.Api.Handlers;
 using KegiFin.Core.Models.Reports;
 using KegiFin.Tests.Unit.Api.Handlers.Reports.TestUtils.Requests;
 using KegiFin.Tests.Unit.Api.Handlers.Reports.TestUtils.Seeds;
-using KegiFin.Tests.Unit.Helpers.Mocking;
+using KegiFin.Tests.Unit.Helpers.Mocking.Db.Query;
+using KegiFin.Tests.Unit.Helpers.Mocking.Logging;
+using KegiFin.Tests.Unit.Helpers.Testing;
 using Microsoft.Extensions.Logging;
 
 namespace KegiFin.Tests.Unit.Api.Handlers.Reports.Get;
@@ -15,7 +17,7 @@ public class GetIncomesAndExpensesHandlerTests
         // Arrange
         var incomesAndExpenses = ReportSeed.GetValidRequestIncomesAndExpenses();
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(incomesAndExpenses, x => x.IncomesAndExpenses);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateIncomesAndExpensesRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -49,7 +51,7 @@ public class GetIncomesAndExpensesHandlerTests
         // Arrange
         var incomesAndExpenses = ReportSeed.GetOrderByYearAndMonth();
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(incomesAndExpenses, x => x.IncomesAndExpenses);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateIncomesAndExpensesRequest();
 
         var handler = HandlerTestHelper<ReportHandler>
@@ -84,7 +86,7 @@ public class GetIncomesAndExpensesHandlerTests
         // Arrange
         var incomesAndExpenses = new List<IncomesAndExpenses>();
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(incomesAndExpenses, x => x.IncomesAndExpenses);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateIncomesAndExpensesRequest();
 
         var handler = HandlerTestHelper<ReportHandler>
@@ -107,7 +109,7 @@ public class GetIncomesAndExpensesHandlerTests
     {
         // Arrange
         var mockContext = QueryMockHelper.CreateMockDbContextWithException(x => x.IncomesAndExpenses);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateIncomesAndExpensesRequest();
         
         var handler = HandlerTestHelper<ReportHandler>

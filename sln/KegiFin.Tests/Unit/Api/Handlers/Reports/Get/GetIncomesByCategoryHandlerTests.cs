@@ -1,7 +1,9 @@
 using KegiFin.Api.Handlers;
 using KegiFin.Tests.Unit.Api.Handlers.Reports.TestUtils.Requests;
 using KegiFin.Tests.Unit.Api.Handlers.Reports.TestUtils.Seeds;
-using KegiFin.Tests.Unit.Helpers.Mocking;
+using KegiFin.Tests.Unit.Helpers.Mocking.Db.Query;
+using KegiFin.Tests.Unit.Helpers.Mocking.Logging;
+using KegiFin.Tests.Unit.Helpers.Testing;
 using Microsoft.Extensions.Logging;
 
 namespace KegiFin.Tests.Unit.Api.Handlers.Reports.Get;
@@ -14,7 +16,7 @@ public class GetIncomesByCategoryHandlerTests
         // Arrange
         var incomesByCategory = ReportSeed.GetIncomesByCategorySingle();
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(incomesByCategory, x => x.IncomesByCategories);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateIncomesByCategoryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -49,7 +51,7 @@ public class GetIncomesByCategoryHandlerTests
         // Arrange
         var incomesByCategory = ReportSeed.GetOrderByYearAndCategoryIncomes();
         var mockContext = QueryMockHelper.CreateMockDbContextWithData(incomesByCategory, x => x.IncomesByCategories);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateIncomesByCategoryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -80,7 +82,7 @@ public class GetIncomesByCategoryHandlerTests
     public async Task GetIncomesByCategoryReportAsync_EmptyDataRequest_ReturnsEmptyList()
     {
         var mockContext = QueryMockHelper.CreateMockDbContextWithData([], x => x.IncomesByCategories);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateIncomesByCategoryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>
@@ -104,7 +106,7 @@ public class GetIncomesByCategoryHandlerTests
     {
         // Arrange
         var mockContext = QueryMockHelper.CreateMockDbContextWithException(x => x.IncomesByCategories);
-        var mockLogger = QueryMockHelper.GetMockLogger<ReportHandler>();
+        var mockLogger = LoggerMockHelper.GetMockLogger<ReportHandler>();
         var request = ReportRequestFactory.CreateIncomesByCategoryRequest();
         
         var handler = HandlerTestHelper<ReportHandler>

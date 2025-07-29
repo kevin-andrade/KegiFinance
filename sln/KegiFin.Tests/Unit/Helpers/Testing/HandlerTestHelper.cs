@@ -2,7 +2,7 @@ using KegiFin.Api.Data;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace KegiFin.Tests.Unit.Helpers.Mocking;
+namespace KegiFin.Tests.Unit.Helpers.Testing;
 
 public static class HandlerTestHelper<THandler> where THandler : class
 {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
-namespace KegiFin.Tests.Unit.Helpers.Mocking;
+namespace KegiFin.Tests.Unit.Helpers.Mocking.Db.DbSet;
 
 public static class DbSetMockHelper
 {

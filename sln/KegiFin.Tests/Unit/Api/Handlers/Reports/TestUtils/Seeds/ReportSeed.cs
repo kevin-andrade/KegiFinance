@@ -1,4 +1,3 @@
-using KegiFin.Core.Models;
 using KegiFin.Core.Models.Reports;
 
 namespace KegiFin.Tests.Unit.Api.Handlers.Reports.TestUtils.Seeds;
